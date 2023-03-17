@@ -1,254 +1,254 @@
 CREATE DATABASE kinopoisk;
 
-create table person
+CREATE TABLE person
 (
-    id          bigint generated always as identity
-        primary key,
-    person_name text not null,
-    surname     text not null
+    id          bigint GENERATED ALWAYS AS IDENTITY
+        PRIMARY KEY,
+    person_name text NOT NULL,
+    surname     text NOT NULL
 );
 
-comment on table person is 'Все персоны кроме актеров главных ролей и актеров дубляжа';
+COMMENT ON TABLE person IS 'Все персоны кроме актеров главных ролей и актеров дубляжа';
 
-alter table person
-    owner to postgres;
+ALTER TABLE person
+    OWNER TO postgres;
 
-create table film
+CREATE TABLE film
 (
-    id                bigint generated always as identity
-        primary key,
-    film_name         text    not null,
+    id                bigint GENERATED ALWAYS AS IDENTITY
+        PRIMARY KEY,
+    film_name         text       NOT NULL,
     description       text,
     rating            real,
     number_of_rating  bigint,
     number_of_reviews integer,
-    film_year         varchar(4) not null,
-    country           text    not null,
+    film_year         varchar(4) NOT NULL,
+    country           text       NOT NULL,
     slogan            text,
-    budget            bigint  not null,
-    marketing         bigint  not null,
-    "fees_in_USA"     bigint  not null,
-    fees_in_world     bigint  not null,
-    film_time         integer not null,
-    director_id       bigint  not null
-        constraint director_fkey
-            references person,
-    screenwriter_id   bigint  not null
-        constraint screenwriter_fkey
-            references person,
-    producer_id       bigint  not null
-        constraint producer_fkey
-            references person,
-    operator_id       bigint  not null
-        constraint operator_fkey
-            references person,
-    composer_id       bigint  not null
-        constraint composer_fkey
-            references person,
-    artist_id         bigint  not null
-        constraint atrist_fkey
-            references person,
-    editor_id         bigint  not null
-        constraint editor_fkey
-            references person
+    budget            bigint     NOT NULL,
+    marketing         bigint     NOT NULL,
+    "fees_in_USA"     bigint     NOT NULL,
+    fees_in_world     bigint     NOT NULL,
+    film_time         integer    NOT NULL,
+    director_id       bigint     NOT NULL
+        CONSTRAINT director_fkey
+            REFERENCES person,
+    screenwriter_id   bigint     NOT NULL
+        CONSTRAINT screenwriter_fkey
+            REFERENCES person,
+    producer_id       bigint     NOT NULL
+        CONSTRAINT producer_fkey
+            REFERENCES person,
+    operator_id       bigint     NOT NULL
+        CONSTRAINT operator_fkey
+            REFERENCES person,
+    composer_id       bigint     NOT NULL
+        CONSTRAINT composer_fkey
+            REFERENCES person,
+    artist_id         bigint     NOT NULL
+        CONSTRAINT atrist_fkey
+            REFERENCES person,
+    editor_id         bigint     NOT NULL
+        CONSTRAINT editor_fkey
+            REFERENCES person
 );
 
-alter table film
-    owner to postgres;
+ALTER TABLE film
+    OWNER TO postgres;
 
-create table audio
+CREATE TABLE audio
 (
-    id             integer generated always as identity
-        primary key,
-    audio_language text not null
+    id             integer GENERATED ALWAYS AS IDENTITY
+        PRIMARY KEY,
+    audio_language text NOT NULL
 );
 
-alter table audio
-    owner to postgres;
+ALTER TABLE audio
+    OWNER TO postgres;
 
-create table subtitles
+CREATE TABLE subtitles
 (
-    id                 integer generated always as identity
-        primary key,
-    subtitles_language text not null
+    id                 integer GENERATED ALWAYS AS IDENTITY
+        PRIMARY KEY,
+    subtitles_language text NOT NULL
 );
 
-alter table subtitles
-    owner to postgres;
+ALTER TABLE subtitles
+    OWNER TO postgres;
 
-create table quality
+CREATE TABLE quality
 (
-    id            integer generated always as identity
-        primary key,
-    quality_value text   not null,
-    film_id       bigint not null
-        constraint film_fkey
-            references film
+    id            integer GENERATED ALWAYS AS IDENTITY
+        PRIMARY KEY,
+    quality_value text   NOT NULL,
+    film_id       bigint NOT NULL
+        CONSTRAINT film_fkey
+            REFERENCES film
 );
 
-comment on table quality is 'Качество видео';
+COMMENT ON TABLE quality IS 'Качество видео';
 
-alter table quality
-    owner to postgres;
+ALTER TABLE quality
+    OWNER TO postgres;
 
-create table audience
+CREATE TABLE audience
 (
-    id              integer generated always as identity
-        primary key,
-    country         text   not null,
-    audience_number bigint not null,
-    film_id         bigint not null
-        constraint film_fkey
-            references film
+    id              integer GENERATED ALWAYS AS IDENTITY
+        PRIMARY KEY,
+    country         text   NOT NULL,
+    audience_number bigint NOT NULL,
+    film_id         bigint NOT NULL
+        CONSTRAINT film_fkey
+            REFERENCES film
 );
 
-alter table audience
-    owner to postgres;
+ALTER TABLE audience
+    OWNER TO postgres;
 
-create table genre
+CREATE TABLE genre
 (
-    id         integer generated always as identity
-        primary key,
-    genre_name text not null
+    id         integer GENERATED ALWAYS AS IDENTITY
+        PRIMARY KEY,
+    genre_name text NOT NULL
 );
 
-alter table genre
-    owner to postgres;
+ALTER TABLE genre
+    OWNER TO postgres;
 
-create table "rating_MPAA"
+CREATE TABLE "rating_MPAA"
 (
-    id                  integer generated always as identity
-        primary key,
-    "rating_MPAA_value" text   not null,
-    film_id             bigint not null
-        constraint film_fkey
-            references film
+    id                  integer GENERATED ALWAYS AS IDENTITY
+        PRIMARY KEY,
+    "rating_MPAA_value" text   NOT NULL,
+    film_id             bigint NOT NULL
+        CONSTRAINT film_fkey
+            REFERENCES film
 );
 
-alter table "rating_MPAA"
-    owner to postgres;
+ALTER TABLE "rating_MPAA"
+    OWNER TO postgres;
 
-create table role
+CREATE TABLE role
 (
-    id           integer generated always as identity
-        constraint roles_pkey
-            primary key,
-    role_name    text    not null,
-    surname      text    not null,
-    main_role    boolean not null,
-    dubbing_role boolean not null
+    id           integer GENERATED ALWAYS AS IDENTITY
+        CONSTRAINT roles_pkey
+            PRIMARY KEY,
+    role_name    text    NOT NULL,
+    surname      text    NOT NULL,
+    main_role    boolean NOT NULL,
+    dubbing_role boolean NOT NULL
 );
 
-comment on table role is 'Актеры главных ролей и актеры озвучки';
+COMMENT ON TABLE role IS 'Актеры главных ролей и актеры озвучки';
 
-alter table role
-    owner to postgres;
+ALTER TABLE role
+    OWNER TO postgres;
 
-create table film_roles
+CREATE TABLE film_roles
 (
-    id      bigint generated always as identity
-        constraint "film-person_pkey"
-            primary key,
-    film_id bigint not null
-        constraint film_fkey
-            references film,
-    role_id bigint not null
-        constraint role_fkey
-            references role
+    id      bigint GENERATED ALWAYS AS IDENTITY
+        CONSTRAINT "film-person_pkey"
+            PRIMARY KEY,
+    film_id bigint NOT NULL
+        CONSTRAINT film_fkey
+            REFERENCES film,
+    role_id bigint NOT NULL
+        CONSTRAINT role_fkey
+            REFERENCES role
 );
 
-alter table film_roles
-    owner to postgres;
+ALTER TABLE film_roles
+    OWNER TO postgres;
 
-create table distributor
+CREATE TABLE distributor
 (
-    id               integer generated always as identity
-        primary key,
-    distributor_name text not null
+    id               integer GENERATED ALWAYS AS IDENTITY
+        PRIMARY KEY,
+    distributor_name text NOT NULL
 );
 
-comment on table distributor is 'Прокатчик';
+COMMENT ON TABLE distributor IS 'Прокатчик';
 
-alter table distributor
-    owner to postgres;
+ALTER TABLE distributor
+    OWNER TO postgres;
 
-create table premiere
+CREATE TABLE premiere
 (
-    id              bigint generated always as identity
-        primary key,
-    premiere_date   timestamp not null,
-    country         text      not null,
+    id              bigint GENERATED ALWAYS AS IDENTITY
+        PRIMARY KEY,
+    premiere_date   timestamp NOT NULL,
+    country         text      NOT NULL,
     distributor_id  integer
-        constraint distributor_id
-            references distributor,
-    on_data_storage boolean   not null,
-    film_id         bigint    not null
-        constraint film_fkey
-            references film
+        CONSTRAINT distributor_id
+            REFERENCES distributor,
+    on_data_storage boolean   NOT NULL,
+    film_id         bigint    NOT NULL
+        CONSTRAINT film_fkey
+            REFERENCES film
 );
 
-comment on table premiere is 'Даты премьер по странам ';
+COMMENT ON TABLE premiere IS 'Даты премьер по странам ';
 
-comment on column premiere.on_data_storage is 'На физическом носителе';
+COMMENT ON COLUMN premiere.on_data_storage IS 'На физическом носителе';
 
-alter table premiere
-    owner to postgres;
+ALTER TABLE premiere
+    OWNER TO postgres;
 
-create table film_genre
+CREATE TABLE film_genre
 (
-    id         bigint generated always as identity
-        primary key,
-    film_id    bigint  not null
-        constraint film_fkey
-            references film,
-    "genre-id" integer not null
-        constraint genre_fkey
-            references genre
+    id         bigint GENERATED ALWAYS AS IDENTITY
+        PRIMARY KEY,
+    film_id    bigint  NOT NULL
+        CONSTRAINT film_fkey
+            REFERENCES film,
+    "genre-id" integer NOT NULL
+        CONSTRAINT genre_fkey
+            REFERENCES genre
 );
 
-alter table film_genre
-    owner to postgres;
+ALTER TABLE film_genre
+    OWNER TO postgres;
 
-create table film_audio
+CREATE TABLE film_audio
 (
-    id       bigint generated always as identity
-        primary key,
-    film_id  bigint  not null
-        constraint film_fkey
-            references film,
-    audio_id integer not null
-        constraint audio_fkey
-            references audio
+    id       bigint GENERATED ALWAYS AS IDENTITY
+        PRIMARY KEY,
+    film_id  bigint  NOT NULL
+        CONSTRAINT film_fkey
+            REFERENCES film,
+    audio_id integer NOT NULL
+        CONSTRAINT audio_fkey
+            REFERENCES audio
 );
 
-alter table film_audio
-    owner to postgres;
+ALTER TABLE film_audio
+    OWNER TO postgres;
 
-create table film_subtitles
+CREATE TABLE film_subtitles
 (
-    id           bigint generated always as identity
-        primary key,
-    film_id      bigint  not null
-        constraint film_fkey
-            references film,
-    subtitles_id integer not null
-        constraint subtitles_fkey
-            references subtitles
+    id           bigint GENERATED ALWAYS AS IDENTITY
+        PRIMARY KEY,
+    film_id      bigint  NOT NULL
+        CONSTRAINT film_fkey
+            REFERENCES film,
+    subtitles_id integer NOT NULL
+        CONSTRAINT subtitles_fkey
+            REFERENCES subtitles
 );
 
-alter table film_subtitles
-    owner to postgres;
+ALTER TABLE film_subtitles
+    OWNER TO postgres;
 
-create table image
+CREATE TABLE image
 (
-    id        bigint generated always as identity
-        primary key,
-    image_url text   not null,
-    film_id   bigint not null
-        constraint film_fkey
-            references film
+    id        bigint GENERATED ALWAYS AS IDENTITY
+        PRIMARY KEY,
+    image_url text   NOT NULL,
+    film_id   bigint NOT NULL
+        CONSTRAINT film_fkey
+            REFERENCES film
 );
 
-alter table image
-    owner to postgres;
+ALTER TABLE image
+    OWNER TO postgres;
 
