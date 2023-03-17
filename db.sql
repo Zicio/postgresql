@@ -1,4 +1,6 @@
-create table kinopoisk.person
+CREATE DATABASE kinopoisk;
+
+create table person
 (
     id          bigint generated always as identity
         primary key,
@@ -6,12 +8,12 @@ create table kinopoisk.person
     surname     text not null
 );
 
-comment on table kinopoisk.person is 'Все персоны кроме актеров главных ролей и актеров дубляжа';
+comment on table person is 'Все персоны кроме актеров главных ролей и актеров дубляжа';
 
-alter table kinopoisk.person
+alter table person
     owner to postgres;
 
-create table kinopoisk.film
+create table film
 (
     id                bigint generated always as identity
         primary key,
@@ -20,7 +22,7 @@ create table kinopoisk.film
     rating            real,
     number_of_rating  bigint,
     number_of_reviews integer,
-    film_year         integer not null,
+    film_year         varchar(4) not null,
     country           text    not null,
     slogan            text,
     budget            bigint  not null,
@@ -30,66 +32,66 @@ create table kinopoisk.film
     film_time         integer not null,
     director_id       bigint  not null
         constraint director_fkey
-            references kinopoisk.person,
+            references person,
     screenwriter_id   bigint  not null
         constraint screenwriter_fkey
-            references kinopoisk.person,
+            references person,
     producer_id       bigint  not null
         constraint producer_fkey
-            references kinopoisk.person,
+            references person,
     operator_id       bigint  not null
         constraint operator_fkey
-            references kinopoisk.person,
+            references person,
     composer_id       bigint  not null
         constraint composer_fkey
-            references kinopoisk.person,
+            references person,
     artist_id         bigint  not null
         constraint atrist_fkey
-            references kinopoisk.person,
+            references person,
     editor_id         bigint  not null
         constraint editor_fkey
-            references kinopoisk.person
+            references person
 );
 
-alter table kinopoisk.film
+alter table film
     owner to postgres;
 
-create table kinopoisk.audio
+create table audio
 (
     id             integer generated always as identity
         primary key,
     audio_language text not null
 );
 
-alter table kinopoisk.audio
+alter table audio
     owner to postgres;
 
-create table kinopoisk.subtitles
+create table subtitles
 (
     id                 integer generated always as identity
         primary key,
     subtitles_language text not null
 );
 
-alter table kinopoisk.subtitles
+alter table subtitles
     owner to postgres;
 
-create table kinopoisk.quality
+create table quality
 (
     id            integer generated always as identity
         primary key,
     quality_value text   not null,
     film_id       bigint not null
         constraint film_fkey
-            references kinopoisk.film
+            references film
 );
 
-comment on table kinopoisk.quality is 'Качество видео';
+comment on table quality is 'Качество видео';
 
-alter table kinopoisk.quality
+alter table quality
     owner to postgres;
 
-create table kinopoisk.audience
+create table audience
 (
     id              integer generated always as identity
         primary key,
@@ -97,36 +99,36 @@ create table kinopoisk.audience
     audience_number bigint not null,
     film_id         bigint not null
         constraint film_fkey
-            references kinopoisk.film
+            references film
 );
 
-alter table kinopoisk.audience
+alter table audience
     owner to postgres;
 
-create table kinopoisk.genre
+create table genre
 (
     id         integer generated always as identity
         primary key,
     genre_name text not null
 );
 
-alter table kinopoisk.genre
+alter table genre
     owner to postgres;
 
-create table kinopoisk."rating_MPAA"
+create table "rating_MPAA"
 (
     id                  integer generated always as identity
         primary key,
     "rating_MPAA_value" text   not null,
     film_id             bigint not null
         constraint film_fkey
-            references kinopoisk.film
+            references film
 );
 
-alter table kinopoisk."rating_MPAA"
+alter table "rating_MPAA"
     owner to postgres;
 
-create table kinopoisk.role
+create table role
 (
     id           integer generated always as identity
         constraint roles_pkey
@@ -137,40 +139,40 @@ create table kinopoisk.role
     dubbing_role boolean not null
 );
 
-comment on table kinopoisk.role is 'Актеры главных ролей и актеры озвучки';
+comment on table role is 'Актеры главных ролей и актеры озвучки';
 
-alter table kinopoisk.role
+alter table role
     owner to postgres;
 
-create table kinopoisk.film_roles
+create table film_roles
 (
     id      bigint generated always as identity
         constraint "film-person_pkey"
             primary key,
     film_id bigint not null
         constraint film_fkey
-            references kinopoisk.film,
+            references film,
     role_id bigint not null
         constraint role_fkey
-            references kinopoisk.role
+            references role
 );
 
-alter table kinopoisk.film_roles
+alter table film_roles
     owner to postgres;
 
-create table kinopoisk.distributor
+create table distributor
 (
     id               integer generated always as identity
         primary key,
     distributor_name text not null
 );
 
-comment on table kinopoisk.distributor is 'Прокатчик';
+comment on table distributor is 'Прокатчик';
 
-alter table kinopoisk.distributor
+alter table distributor
     owner to postgres;
 
-create table kinopoisk.premiere
+create table premiere
 (
     id              bigint generated always as identity
         primary key,
@@ -178,75 +180,75 @@ create table kinopoisk.premiere
     country         text      not null,
     distributor_id  integer
         constraint distributor_id
-            references kinopoisk.distributor,
+            references distributor,
     on_data_storage boolean   not null,
     film_id         bigint    not null
         constraint film_fkey
-            references kinopoisk.film
+            references film
 );
 
-comment on table kinopoisk.premiere is 'Даты премьер по странам ';
+comment on table premiere is 'Даты премьер по странам ';
 
-comment on column kinopoisk.premiere.on_data_storage is 'На физическом носителе';
+comment on column premiere.on_data_storage is 'На физическом носителе';
 
-alter table kinopoisk.premiere
+alter table premiere
     owner to postgres;
 
-create table kinopoisk.film_genre
+create table film_genre
 (
     id         bigint generated always as identity
         primary key,
     film_id    bigint  not null
         constraint film_fkey
-            references kinopoisk.film,
+            references film,
     "genre-id" integer not null
         constraint genre_fkey
-            references kinopoisk.genre
+            references genre
 );
 
-alter table kinopoisk.film_genre
+alter table film_genre
     owner to postgres;
 
-create table kinopoisk.film_audio
+create table film_audio
 (
     id       bigint generated always as identity
         primary key,
     film_id  bigint  not null
         constraint film_fkey
-            references kinopoisk.film,
+            references film,
     audio_id integer not null
         constraint audio_fkey
-            references kinopoisk.audio
+            references audio
 );
 
-alter table kinopoisk.film_audio
+alter table film_audio
     owner to postgres;
 
-create table kinopoisk.film_subtitles
+create table film_subtitles
 (
     id           bigint generated always as identity
         primary key,
     film_id      bigint  not null
         constraint film_fkey
-            references kinopoisk.film,
+            references film,
     subtitles_id integer not null
         constraint subtitles_fkey
-            references kinopoisk.subtitles
+            references subtitles
 );
 
-alter table kinopoisk.film_subtitles
+alter table film_subtitles
     owner to postgres;
 
-create table kinopoisk.image
+create table image
 (
     id        bigint generated always as identity
         primary key,
     image_url text   not null,
     film_id   bigint not null
         constraint film_fkey
-            references kinopoisk.film
+            references film
 );
 
-alter table kinopoisk.image
+alter table image
     owner to postgres;
 
